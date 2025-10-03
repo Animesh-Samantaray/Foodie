@@ -1,8 +1,11 @@
+/* Hide scrollbar for all browsers but keep scrolling smooth */
 .hide-scrollbar {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;     /* Firefox */
+  overflow-x: auto;           /* Ensure horizontal scroll works */
+  scroll-behavior: smooth;    /* Smooth scrolling */
 }
 
 .hide-scrollbar::-webkit-scrollbar {
-  display: none;  /* Chrome, Safari, Opera */
+  display: none;              /* Chrome, Safari, Opera */
 }
