@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import logo from "../assets/logo.png";
 import { FaShoppingBasket, FaBars, FaTimes } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 const Navbar = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   // centralized menu items
   const menuItems = [
@@ -56,13 +57,14 @@ const Navbar = () => {
         {/* Right Side */}
         <div className="flex items-center gap-6">
           <div className="relative">
-            <FaShoppingBasket className="text-2xl cursor-pointer text-gray-600 hover:text-blue-500" />
+            <FaShoppingBasket className="text-2xl cursor-pointer text-gray-600 hover:text-blue-500"  onClick={()=>navigate('/cart')}/>
             <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
-              2
+              
             </div>
           </div>
 
-          <button className="hidden sm:block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+          <button className="hidden sm:block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+          onClick={()=>navigate('/signup')}>
             Sign in
           </button>
 
@@ -102,7 +104,8 @@ const Navbar = () => {
               </li>
             ))}
 
-            <button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">
+            <button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
+            onClick={()=>navigate('/signup')}>
               Sign in
             </button>
           </ul>
