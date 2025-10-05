@@ -2,65 +2,80 @@ import React, { useContext } from "react";
 import { StoreContext } from "../context/StoreContext";
 
 const Cart = () => {
-  const { food_list, removeFromCart, cartItems } = useContext(StoreContext);
+  const { food_list, removeFromCart, cartItems, val } = useContext(StoreContext);
+
+  // Collect only items in the cart
+  const cartData = food_list.filter((item) => cartItems[item._id] > 0);
 
   return (
-    <div className="min-h-screen bg-gray-50 px-6 py-8">
-      <h1 className="text-2xl font-bold mb-6 text-gray-800">Your Cart</h1>
-
-      {/* Table Header */}
-      <div className="hidden md:grid grid-cols-6 bg-gray-200 p-3 rounded-lg font-semibold text-gray-700">
-        <p>Image</p>
-        <p>Name</p>
-        <p>Price</p>
-        <p>Quantity</p>
-        <p>Total</p>
-        <p>Remove</p>
-      </div>
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
+      <h1 className="text-xl sm:text-2xl font-bold mb-6">Your Cart</h1>
 
       {/* Cart Items */}
-      <div className="space-y-4 mt-4">
-        {food_list.map((item) => {
-          if (cartItems[item._id] > 0) {
-            return (
-              <div
-                key={item._id}
-                className="grid grid-cols-2 md:grid-cols-6 items-center gap-4 bg-white p-4 shadow-md rounded-lg"
-              >
-                {/* Image */}
+      <div className="space-y-3">
+        {cartData.length > 0 ? (
+          cartData.map((item) => (
+            <div
+              key={item._id}
+              className="flex items-center justify-between bg-white p-3 rounded-md shadow-sm"
+            >
+              {/* Left side: Image + name */}
+              <div className="flex items-center gap-3">
                 <img
                   src={item.image}
                   alt={item.name}
-                  className="w-20 h-20 object-cover rounded-md"
+                  className="w-14 h-14 object-cover rounded"
                 />
+                <div>
+                  <p className="font-medium">{item.name}</p>
+                  <p className="text-sm text-gray-500">${item.price}</p>
+                </div>
+              </div>
 
-                {/* Name */}
-                <p className="font-medium text-gray-800">{item.name}</p>
-
-                {/* Price */}
-                <p className="text-gray-700">${item.price}</p>
-
-                {/* Quantity */}
-                <p className="text-gray-700">{cartItems[item._id]}</p>
-
-                {/* Total */}
-                <p className="font-semibold text-gray-800">
+              {/* Right side: Qty + Total + Remove */}
+              <div className="flex items-center gap-4">
+                <p className="text-sm">x {cartItems[item._id]}</p>
+                <p className="font-semibold">
                   ${item.price * cartItems[item._id]}
                 </p>
-
-                {/* Remove */}
                 <button
                   onClick={() => removeFromCart(item._id)}
-                  className="text-red-500 font-semibold hover:text-red-700"
+                  className="text-red-500 hover:underline text-sm"
                 >
                   Remove
                 </button>
               </div>
-            );
-          }
-          return null;
-        })}
+            </div>
+          ))
+        ) : (
+          <div className="flex items-center justify-center h-40 text-gray-500 italic">
+            Nothing in your cart
+          </div>
+        )}
       </div>
+
+      {/* Summary */}
+      {val > 0 && (
+        <div className="mt-8 p-4 bg-white rounded-md shadow-sm w-full max-w-md">
+          <h2 className="font-semibold mb-3">Order Summary</h2>
+          <div className="flex justify-between text-sm mb-1">
+            <span>Items Total</span>
+            <span>${val}</span>
+          </div>
+          <div className="flex justify-between text-sm mb-1">
+            <span>Delivery Fee</span>
+            <span>$3</span>
+          </div>
+          <hr className="my-2" />
+          <div className="flex justify-between font-semibold">
+            <span>Total</span>
+            <span>${val + 3}</span>
+          </div>
+          <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+            Place Order
+          </button>
+        </div>
+      )}
     </div>
   );
 };

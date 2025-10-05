@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import logo from "../assets/logo.png";
 import { FaShoppingBasket, FaBars, FaTimes } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { StoreContext } from "../context/StoreContext";
 const Navbar = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +16,9 @@ const Navbar = () => {
     { name: "Contact Us", type: "link", path: "/contact" },
   ];
 
+  const {val} = useContext(StoreContext);
+
+  
   const handleClick = (item) => {
     setIsOpen(false); // close mobile menu if open
     if (item.type === "scroll") {
