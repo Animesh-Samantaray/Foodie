@@ -62,9 +62,11 @@ const Navbar = () => {
         <div className="flex items-center gap-6">
           <div className="relative">
             <FaShoppingBasket className="text-2xl cursor-pointer text-gray-600 hover:text-blue-500"  onClick={()=>navigate('/cart')}/>
-            <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
-              
+            {
+              val > 0 && <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
+
             </div>
+            }
           </div>
 
           <button className="hidden sm:block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
