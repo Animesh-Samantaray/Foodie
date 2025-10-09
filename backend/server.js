@@ -11,10 +11,12 @@ app.use(cors())
 connectDB()
 
 app.use('/api/foods',foodRouter);
+app.use('/images',express.static('uploads'))
+
 app.get('/',(req,res)=>{
     res.send('app-----> http://localhost:'+port);
 })
 
 app.listen(port , ()=>{
-    console.log('app listening on port '+port)
+    console.log('app-----> http://localhost:'+port)
 })
