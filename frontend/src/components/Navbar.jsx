@@ -1,31 +1,36 @@
 import React, { useContext, useState } from "react";
 import logo from "../assets/logo.png";
 import { FaShoppingBasket, FaBars, FaTimes } from "react-icons/fa";
-import { Link, useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { StoreContext } from "../context/StoreContext";
+import toast from "react-hot-toast";
+
 const Navbar = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
-  // centralized menu items
   const menuItems = [
     { name: "Home", type: "link", path: "/" },
     { name: "Menu", type: "scroll", id: "explore-menu" },
     { name: "Contact Us", type: "link", path: "/contact" },
   ];
 
-  const {val} = useContext(StoreContext);
+  const { val, token, setToken } = useContext(StoreContext);
 
-  
+  const onLogout = async () => {
+    localStorage.removeItem("token");
+    setToken("");
+    navigate("/");
+    toast.success("Logged out");
+  };
+
   const handleClick = (item) => {
-    setIsOpen(false); // close mobile menu if open
+    setIsOpen(false);
     if (item.type === "scroll") {
       const section = document.getElementById(item.id);
       if (section) section.scrollIntoView({ behavior: "smooth" });
     }
-    // no need to do anything if type is link, <Link> handles it
   };
 
   return (
@@ -60,19 +65,35 @@ const Navbar = () => {
 
         {/* Right Side */}
         <div className="flex items-center gap-6">
-          <div className="relative">
-            <FaShoppingBasket className="text-2xl cursor-pointer text-gray-600 hover:text-blue-500"  onClick={()=>navigate('/cart')}/>
-            {
-              val > 0 && <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
-
+          {token && (
+            <div className="relative">
+              <FaShoppingBasket
+                className="text-2xl cursor-pointer text-gray-600 hover:text-blue-500"
+                onClick={() => navigate("/cart")}
+              />
+              {val > 0 && (
+                <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full"></div>
+              )}
             </div>
-            }
-          </div>
+          )}
 
-          <button className="hidden sm:block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-          onClick={()=>navigate('/signup')}>
-            Sign in
-          </button>
+          {!token && (
+            <button
+              className="hidden sm:block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+              onClick={() => navigate("/signup")}
+            >
+              Sign in
+            </button>
+          )}
+
+          {token && (
+            <button
+              className="hidden sm:block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+              onClick={onLogout}
+            >
+              Log out
+            </button>
+          )}
 
           <button
             className="md:hidden text-2xl text-gray-700 focus:outline-none"
@@ -94,7 +115,9 @@ const Navbar = () => {
                     to={item.path}
                     onClick={() => setIsOpen(false)}
                     className={`block py-2 px-2 rounded-md hover:bg-gray-100 ${
-                      location.pathname === item.path ? "text-blue-700 font-semibold" : ""
+                      location.pathname === item.path
+                        ? "text-blue-700 font-semibold"
+                        : ""
                     }`}
                   >
                     {item.name}
@@ -110,10 +133,29 @@ const Navbar = () => {
               </li>
             ))}
 
-            <button className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
-            onClick={()=>navigate('/signup')}>
-              Sign in
-            </button>
+            {!token && (
+              <button
+                className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
+                onClick={() => {
+                  navigate("/signup");
+                  setIsOpen(false);
+                }}
+              >
+                Sign in
+              </button>
+            )}
+
+            {token && (
+              <button
+                className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
+                onClick={(e) => {
+                  onLogout(e);
+                  setIsOpen(false);
+                }}
+              >
+                Log out
+              </button>
+            )}
           </ul>
         </div>
       )}

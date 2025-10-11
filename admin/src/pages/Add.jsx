@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
+
 const categories = [
   "Pizza", "Burger", "Pasta", "Sushi", "Tacos",
   "Salad", "Sandwich", "Fried Chicken", "Ice Cream", "Steak",
